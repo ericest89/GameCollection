@@ -1,0 +1,61 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GameCollectionWithMenu extends JFrame implements ActionListener {
+    public static final long serialVersionUID = 1L;
+
+    public JComboBox<String> games;
+    public JLabel output;
+
+
+    public GameCollectionWithMenu() {
+        super("Game Collection");
+
+        String[] gameList = {"Hangman", "Rock-Paper-Scissors-Lizard-Spock", "Tic Tac Toe", "Quit"};
+        games = new JComboBox<>(gameList);
+        games.addActionListener(this);
+
+        output = new JLabel("Welcome to the Game Collection!");
+        setLayout(new FlowLayout());
+        add(games);
+        add(output);
+    }
+
+    public static void main(String[] args) {
+        GameCollectionWithMenu gameCollection = new GameCollectionWithMenu();
+        gameCollection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameCollection.setSize(400, 100);
+        gameCollection.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JComboBox<?> source = (JComboBox<?>) e.getSource();
+        String selectedGame = (String) source.getSelectedItem();
+
+        if (selectedGame != null) {
+            switch (selectedGame) {
+                case "Hangman Game" -> {
+                    HangmanGame hangman = new HangmanGame();
+                    hangman.playGame();
+                }
+                case "Rock-Paper-Scissors-Lizard-Spock" -> {
+                    RPSLSGame RPSLSGame = new RPSLSGame();
+                    RPSLSGame.playGame();
+                }
+                case "Tic Tac Toe" -> {
+                    TicTacToeGame ttt = new TicTacToeGame();
+                    ttt.playGame();
+                }
+                case "Quit" -> output.setText("Thanks for playing!");
+                default -> output.setText("Invalid choice. Please try again.");
+            }
+        }
+    }
+    public static void main(String[] args) {
+        new HangmanGame(6);
+    }
+
+}
