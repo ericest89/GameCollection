@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class HangmanGame {
+    private static String[] words = {"computer", "java", "programming", "software", "developer"};
+    private static String word = words[(int) (Math.random() * words.length)];
+    private static String guessedWord = new String(new char[word.length()]).replace('\0', '_');
+    private static int attempts = 6;
+
+
+    public static void main(String[] args) {
+    }
+        public static void playGame() {
+
+
+
+            Scanner scanner = new Scanner(System.in);
+
+        while (attempts > 0 && guessedWord.contains("_")) {
+            System.out.println("You have " + attempts + " attempts left.");
+            System.out.println(guessedWord);
+
+            System.out.print("Guess a letter: ");
+            String guess = scanner.next().toLowerCase();
+
+            if (word.contains(guess)) {
+                for (int i = 0; i < word.length(); i++) {
+                    if (word.charAt(i) == guess.charAt(0)) {
+                        guessedWord = guessedWord.substring(0, i) + guess + guessedWord.substring(i + 1);
+                    }
+                }
+            } else {
+                attempts--;
+                System.out.println("Incorrect guess.");
+            }
+        }
+
+        if (!guessedWord.contains("_")) {
+            System.out.println("Congratulations, you guessed the word: " + word);
+        } else {
+            System.out.println("Sorry, you ran out of attempts. The word was: " + word);
+        }
+    }
+}
