@@ -1,0 +1,151 @@
+import java.util.*;
+public class TicTacToeGameTwo {
+    //we are using global so all methods can know, use static so we dont need an object everytime to access it
+    static ArrayList<Integer> playerPositions = new ArrayList<Integer>();
+    static ArrayList<Integer> computerPositions = new ArrayList<Integer>();
+
+
+    //we are using a 2d array and I am creating the 3 columns and 3 rows, '' are used for chars in this case
+    public static void main(String[] args) {
+    }
+        public static void playGame() {
+            char[][] ticTacToe = {{' ', '|', ' ', '|', ' '},
+                {'-', '+', '-', '+', '-'},
+                {' ', '|', ' ', '|', ' '},
+                {'-', '+', '-', '+', '-'},
+                {' ', '|', ' ', '|', ' '}};
+
+        printticTacToe(ticTacToe);
+
+        Scanner user = new Scanner(System.in);
+        //for the computer to wait for user input use a while true
+        while (true) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Select a box to begin (1-9):");
+            int box = user.nextInt();
+            /*we get the computer overwriting player1 command so use while loop,
+            if an incorrect position is used, keep asking until it does
+             */
+            while (playerPositions.contains(box) || computerPositions.contains(box)) {
+                System.out.println("That's cheating, that position is already taken. Choose another position");
+                box = scan.nextInt();
+            }
+
+            selectBox(ticTacToe, box, "Player1");
+            String result = checkWhoWon();
+            Random rand = new Random();
+            int computerbox = rand.nextInt(9) + 1;
+            while (playerPositions.contains(computerbox) || computerPositions.contains(computerbox)) {
+                computerbox = rand.nextInt(9) + 1;
+            }
+            selectBox(ticTacToe, computerbox, "computer");
+            printticTacToe(ticTacToe);
+            checkWhoWon();
+            String Gameresult = checkWhoWon();
+            if(result.length() > 0){
+                System.out.println(Gameresult);
+                break;
+            }
+
+
+        }
+
+
+    }
+
+    public static void printticTacToe(char[][] ticTacToe) {
+        //for loop for each(array or in this case char [] row in the gameboard and each
+        for (char[] row : ticTacToe) {
+            for (char r : row) {
+                //for each char in the row we are in, print the symbol
+                System.out.print(r);
+            }
+            System.out.println();
+        }
+        //up to this point it will print our the game board, so add it to a method in order to free up space in the
+        //method
+    }
+    //this will change the space box to a symbol of our choice
+    //the switch case acts as if else statements
+
+    public static void selectBox(char[][] ticTacToe, int box, String player) {
+
+        char symbol = ' ';
+
+        if (player.equals("Player1")) {
+            symbol = 'X';
+            playerPositions.add(box);
+        } else if (player.equals("computer")) {
+            symbol = 'O';
+            computerPositions.add(box);
+        }
+        switch (box) {
+            //this element is 0,0 since it'll be this first row and first element
+            //just to put things into prespective an 2d array starts with row then column [row][column]
+            case 1:
+                ticTacToe[0][0] = symbol;
+                break;
+            case 2:
+                ticTacToe[0][2] = symbol;
+                break;
+            case 3:
+                ticTacToe[0][4] = symbol;
+                break;
+            case 4:
+                ticTacToe[2][0] = symbol;
+                break;
+            case 5:
+                ticTacToe[2][2] = symbol;
+                break;
+            case 6:
+                ticTacToe[2][4] = symbol;
+                break;
+            case 7:
+                ticTacToe[4][0] = symbol;
+                break;
+            case 8:
+                ticTacToe[4][2] = symbol;
+                break;
+            case 9:
+                ticTacToe[4][4] = symbol;
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    //to keep track of positions and who wins
+    public static String checkWhoWon() {
+        //Java List interface, java. util. List , represents an ordered sequence of objects
+        List firstRow = Arrays.asList(1, 2, 3);
+        List secondRow = Arrays.asList(4, 5, 6);
+        List lastRow = Arrays.asList(7, 8, 9);
+        List lftClmn = Arrays.asList(1, 4, 7);
+        List mdlClmn = Arrays.asList(2, 5, 8);
+        List rgtClmn = Arrays.asList(3, 6, 9);
+        List crss1 = Arrays.asList(1, 5, 9);
+        List crs2 = Arrays.asList(7, 5, 3);
+        List<List> results = new ArrayList<List>();
+        results.add(firstRow);
+        results.add(secondRow);
+        results.add(lastRow);
+        results.add(lftClmn);
+        results.add(mdlClmn);
+        results.add(rgtClmn);
+        results.add(crss1);
+        results.add(crs2);
+
+        for (List l : results) {
+            if (playerPositions.containsAll(l)) {
+                return "Good Job you won";
+            } else if (computerPositions.containsAll(l)) {
+                return "Computer wins!!";
+            } else if (playerPositions.size() + computerPositions.size() == 9) {
+                return "It's a tie!";
+            }
+        }
+        return "";
+
+    }
+}
