@@ -1,0 +1,87 @@
+import java.util.Scanner;
+
+public class RPSLSGameTwo {
+    private static final String[] choices = {"rock", "paper", "scissors", "lizard", "spock"};
+    private static final int[][] scores = {
+            // rock  paper scissors lizard spock
+            {0,     -1,   1,       1,     -1},  // rock
+            {1,     0,    -1,      -1,    1},   // paper
+            {-1,    1,    0,       1,     -1},  // scissors
+            {-1,    1,    -1,      0,     1},   // lizard
+            {1,     -1,   1,       -1,    0}    // spock
+    };
+
+    public static void main(String[] args) {
+    }
+        public static void playGame() {
+            Scanner scanner = new Scanner(System.in);
+
+        int playerScore = 0;
+        int computerScore = 0;
+
+        while (true) {
+            System.out.println("Enter your choice (rock, paper, scissors, lizard, spock): ");
+            String playerChoice = scanner.nextLine().toLowerCase();
+
+            if (!isValidChoice(playerChoice)) {
+                System.out.println("Invalid choice. Please try again.");
+                continue;
+            }
+
+            String computerChoice = getComputerChoice();
+            System.out.println("Computer chose " + computerChoice);
+
+            int result = getResult(playerChoice, computerChoice);
+            switch (result) {
+                case 0:
+                    System.out.println("It's a tie!");
+                    break;
+                case 1:
+                    System.out.println("You win!");
+                    playerScore++;
+                    break;
+                case -1:
+                    System.out.println("Computer wins!");
+                    computerScore++;
+                    break;
+            }
+
+            System.out.println("Score: You " + playerScore + " - " + computerScore + " Computer");
+
+            System.out.print("Do you want to play again? (y/n): ");
+            String playAgain = scanner.nextLine();
+            if (!playAgain.equalsIgnoreCase("y")) {
+                break;
+            }
+        }
+    }
+
+    private static boolean isValidChoice(String choice) {
+        for (String validChoice : choices) {
+            if (validChoice.equals(choice)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String getComputerChoice() {
+        int index = (int) (Math.random() * choices.length);
+        return choices[index];
+    }
+
+    private static int getResult(String playerChoice, String computerChoice) {
+        int playerIndex = getIndex(playerChoice);
+        int computerIndex = getIndex(computerChoice);
+        return scores[playerIndex][computerIndex];
+    }
+
+    private static int getIndex(String choice) {
+        for (int i = 0; i < choices.length; i++) {
+            if (choices[i].equals(choice)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
